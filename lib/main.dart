@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,6 +47,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  void _decrementCounter(){
+    setState(() {
+      // Added this method just to check the button interaction
+      _counter--;
+    });
+  }
+
+  // Declaration of a void method to increment the counter
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -55,6 +64,43 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  void _openMailApp() async{
+    setState(() async {
+      // Test: Send an email with native apps
+      const uri = "mailto:test@gmail.com?subject=TestMessage&body=BodyTestMessage";
+
+      if (await canLaunch(uri)){
+        await launch(uri);
+      }else{
+        _showDialog();
+      }
+    });
+  }
+
+  // user defined function
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -98,13 +144,21 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+            RaisedButton(
+              onPressed: _decrementCounter,
+              child: Text("-"),
+            ),
+            RaisedButton(
+              onPressed: _incrementCounter,
+              child: Text("+"),
+            ),
           ],
         ),
-      ),
+      )
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: _openMailApp,
+        tooltip: 'Mail App',
+        child: Icon(Icons.mail),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
