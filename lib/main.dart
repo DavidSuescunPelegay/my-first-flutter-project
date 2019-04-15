@@ -3,6 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
 
+void _myAppDataInstance = MyAppData.GetInstance();
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -45,12 +47,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   void _decrementCounter(){
     setState(() {
       // Added this method just to check the button interaction
-      _counter--;
+      _myAppDataInstance.counter--;
     });
   }
 
@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      _myAppDataInstance.counter++;
     });
   }
 
